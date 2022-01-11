@@ -28,6 +28,10 @@ import matplotlib.pyplot as plt
 plt.style.use('seaborn-notebook')
 from matplotlib.ticker import StrMethodFormatter
 from sklearn.preprocessing import StandardScaler, MinMaxScaler, LabelBinarizer
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.pipeline import Pipeline
+from sklearn.impute import SimpleImputer
+from sklearn.metrics import mean_absolute_error
 
 import os
 from sklearn.model_selection import train_test_split
@@ -89,9 +93,53 @@ def parameters_test1():
         'reg_alpha': [0, 0.001, 0.005, 0.01, 0.05, 0.1, 1],
         'learning_rate': [0.01, 0.02, 0.05, 0.1]
     }
+def train1(X,X_test):
+    parameters_test1()
+
+    y = X.Survived
+
+    print(X.head(10))
+
+    features = ["Pclass", "Sex", "SibSp", "Parch"]
+    X = pd.get_dummies(X[features])
+    X_test = pd.get_dummies(X_test[features])
 
 
+    my_pipeline = Pipeline(steps=[('preprocessor', SimpleImputer()),
+                                  ('model', RandomForestClassifier(n_estimators=100, random_state=2))
+                                  ])
 
+    my_pipeline.fit(X, y)
+    preds = my_pipeline.predict(X_test)
+
+    print(y_test)
+    print(preds)
+    # Evaluate the model
+    score = mean_absolute_error(y_test, preds)
+    print('MAE:', score)
+
+def train2(X,X_test):
+    parameters_test1()
+
+    # Break off validation set from training data
+    y = X.Survived
+
+    print(X.head(10))
+
+    features = ["Pclass", "Sex", "SibSp", "Parch"]
+    X = pd.get_dummies(X[features])
+    X_test = pd.get_dummies(X_test[features])
+
+    model = RandomForestClassifier(n_estimators=100, max_depth=3, random_state=2)
+    model.fit(X, y)
+
+    # VALIDATE
+
+    predictions = model.predict(X_test)
+    print(y_test)
+    print(predictions)
+    score = mean_absolute_error(y_test, predictions)
+    print('MAE:', score)
 
 
 
@@ -102,6 +150,7 @@ def parameters_test1():
 X = pd.read_csv('train.csv')
 X_test = pd.read_csv('test.csv')
 gender_data = pd.read_csv("gender_submission.csv")
+
 
 print(X.head())
 
@@ -159,6 +208,8 @@ X["Embarked"] = X["Embarked"].astype(str)
 print(X["Embarked"].dtypes)
 print(X[X["Embarked"] == "C"])
 
+y_test= gender_data['Survived']
+
 #PLOTS
 print("\n_______________________________________")
 print("_____________PLOTS_____________")
@@ -172,34 +223,14 @@ print("_______________________________________\n")
 
 #Train model
 print("\n_______________________________________")
+print("_____________TRAIN MODEL _____________")
+print("_______________________________________\n")
+
+#train1(X, X_test)
+train2(X, X_test)
+
+#Train model
+print("\n_______________________________________")
 print("_____________TRAIN MODEL_____________")
 print("_______________________________________\n")
 
-from sklearn.ensemble import RandomForestClassifier
-
-parameters_test1()
-
-#Break off validation set from training data
-y = X.Survived
-
-
-print(X.head(10))
-
-features = ["Pclass", "Sex", "SibSp", "Parch"]
-X = pd.get_dummies(X[features])
-X_test = pd.get_dummies(X_test[features])
-
-model = RandomForestClassifier(n_estimators=100, max_depth=3, random_state=2)
-model.fit(X, y)
-
-
-#VALIDATE
-
-
-predictions = model.predict(X_test)
-
-gender_data['Survived'] = 'survived'
-gender_data.to_csv('submission.csv', index=False)
-
-
-#X_train, X_valid, y_train, y_valid = train_test_split(X, y, train_size=0.8, test_size=0.2, random_state=0)
