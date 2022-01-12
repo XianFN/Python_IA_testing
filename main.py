@@ -93,6 +93,7 @@ def parameters_test1():
         'reg_alpha': [0, 0.001, 0.005, 0.01, 0.05, 0.1, 1],
         'learning_rate': [0.01, 0.02, 0.05, 0.1]
     }
+
 def train1(X,X_test):
     parameters_test1()
 
@@ -106,7 +107,7 @@ def train1(X,X_test):
 
 
     my_pipeline = Pipeline(steps=[('preprocessor', SimpleImputer()),
-                                  ('model', RandomForestClassifier(n_estimators=100, random_state=2))
+                                  ('model', RandomForestClassifier(n_estimators=200, random_state=2))
                                   ])
 
     my_pipeline.fit(X, y)
@@ -115,6 +116,7 @@ def train1(X,X_test):
     print(y_test)
     print(preds)
     # Evaluate the model
+
     score = mean_absolute_error(y_test, preds)
     print('MAE:', score)
 
@@ -142,6 +144,27 @@ def train2(X,X_test):
     print('MAE:', score)
 
 
+def train3(X,X_test):
+    from sklearn.model_selection import cross_val_score
+    parameters_test1()
+
+    # Break off validation set from training data
+    y = X.Survived
+
+    features = ["Pclass", "Sex", "SibSp", "Parch"]
+    X = pd.get_dummies(X[features])
+    X_test = pd.get_dummies(X_test[features])
+
+    my_pipeline = Pipeline(steps=[('preprocessor', SimpleImputer()),
+                                  ('model', RandomForestClassifier(n_estimators=100, random_state=2))
+                                  ])
+
+    # Multiply by -1 since sklearn calculates *negative* MAE
+    scores = -1 * cross_val_score(my_pipeline, X, y,
+                                  cv=5,
+                                  scoring='neg_mean_absolute_error')
+
+    print("Average MAE score:", scores.mean())
 
 #Open files
 
@@ -226,8 +249,9 @@ print("\n_______________________________________")
 print("_____________TRAIN MODEL _____________")
 print("_______________________________________\n")
 
-#train1(X, X_test)
-train2(X, X_test)
+train1(X, X_test)
+#train2(X, X_test)
+#train3(X, X_test)
 
 #Train model
 print("\n_______________________________________")
