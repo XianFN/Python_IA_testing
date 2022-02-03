@@ -153,18 +153,18 @@ testing = combined[886:]
 print(training.shape)
 print(testing.shape)
 
+print(train.head())
 
-model =  keras.Sequential()
-model.add(layers.Input(43,))
-model.add(layers.Dense(50,))
-model.add(layers.Dense(50,))
-model.add(layers.Dense(50,))
-model.add(layers.Dense(50,))
-model.add(layers.Dense(50,))
-model.add(layers.Dense(50,))
-model.add(layers.Dense(50,))
-model.add(layers.Dense(50,))
-model.add(layers.Dense(1,))
+model = keras.Sequential([
+    layers.Dense(50, input_shape=[43]),
+    layers.Activation('relu'),
+    layers.Dense(50),
+    layers.Activation('relu'),
+    layers.Dense(1),
+
+
+])
+
 
 
 model.compile(

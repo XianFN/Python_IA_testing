@@ -9,6 +9,7 @@
 #exec(open("./Neuron.py").read())
 #exec(open("./NeuronCombined.py").read())
 #Accurate 0.9425837320574163 My Neutal
+#Accurate with relu 0.9497607655502392
 
 
 
@@ -19,4 +20,7 @@
 
 
 
-exec(open("./Regression.py").read())
+#exec(open("./Regression.py").read())
+
+
+exec(open("./Hobbies.py").read())

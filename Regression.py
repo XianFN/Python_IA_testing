@@ -79,21 +79,53 @@ y = Data['price']
 from sklearn.model_selection import train_test_split
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
+import tensorflow as tf
+from tensorflow import keras
+from tensorflow.keras import layers
+print(X_train.head())
 
-from sklearn.ensemble import RandomForestRegressor
-model = RandomForestRegressor(n_estimators=200, n_jobs=-1, random_state=42)
+input_shape = [190]
+model = keras.Sequential([
+    layers.Dense(300, input_shape=[190]),
+    layers.Activation('relu'),
+    layers.Dense(300),
+    layers.Activation('relu'),
+    layers.Dense(1),
+])
 
-model.fit(X_train, y_train)
+activation_layer = layers.Activation('selu')
 
-model_pred = model.predict(X_test)
+x = tf.linspace(-3.0, 3.0, 100)
+y = activation_layer(x) # once created, a layer is callable just like a function
+
+plt.figure(dpi=100)
+plt.plot(x, y)
+plt.xlim(-3, 3)
+plt.xlabel("Input")
+plt.ylabel("Output")
+plt.show()
+
+model.compile(
+    optimizer='adam',
+    loss='mae',
+)
+
+history = model.fit(
+    X_train, y_train,
+    validation_data=(X_test, y_test),
+    batch_size=256,
+    epochs=200,
+)
 
 
-print(model.score(X_test, y_test))
+history_df = pd.DataFrame(history.history)
+# Start the plot at epoch 5. You can change this to get a different view.
+history_df.loc[5:, ['loss']].plot();
 
-from sklearn.metrics import mean_squared_error
+print(("Best Validation Loss: {:0.4f}" )\
+      .format(history_df['loss'].min()))
 
-mse = mean_squared_error(y_test, model_pred)
-print(mse)
+#other loss 13247.33962488121
 
 
 
