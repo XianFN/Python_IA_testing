@@ -42,7 +42,7 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.pipeline import Pipeline
 from sklearn.impute import SimpleImputer
 from sklearn.metrics import mean_absolute_error
-
+from sklearn.preprocessing import OneHotEncoder
 import os
 from sklearn.model_selection import train_test_split
 
@@ -139,10 +139,71 @@ train['Predicted Hobby'] = train['Predicted Hobby'].astype("string")
 
 print(train.dtypes)
 
-y = train["Predicted Hobby"]
+
+###########
+'''
+y = pd.DataFrame([])
+y["Predicted Hobby"] = train["Predicted Hobby"]
+y_training = y[:1200]
+y_testing = y[1200:]
+
+
+OH_encoder = OneHotEncoder(handle_unknown='ignore', sparse=False)
+OH_cols_train = pd.DataFrame(OH_encoder.fit_transform(y_training["Predicted Hobby"]))
+OH_cols_valid = pd.DataFrame(OH_encoder.transform(y_testing["Predicted Hobby"]))
+
+# One-hot encoding removed index; put it back
+OH_cols_train.index = y_training.index
+OH_cols_valid.index = y_testing.index
+
+# Remove categorical columns (will replace with one-hot encoding)
+num_X_train = y_training.drop('Predicted Hobby', axis=1)
+num_X_valid = y_testing.drop('Predicted Hobby', axis=1)
+
+# Add one-hot encoded columns to numerical features
+OH_X_train = pd.concat([num_X_train, OH_cols_train], axis=1)
+OH_X_valid = pd.concat([num_X_valid, OH_cols_valid], axis=1)
+
+print(y.head())
+'''
+#'''
+y = pd.DataFrame([])
+
+Predicted_Academics = []
+Predicted_Arts = []
+Predicted_Sports = []
+
+for x in train['Predicted Hobby']:
+    if x == "Academics":
+        Predicted_Academics.append(1)
+        Predicted_Arts.append(0)
+        Predicted_Sports.append(0)
+    elif x == "Arts":
+        Predicted_Academics.append(0)
+        Predicted_Arts.append(1)
+        Predicted_Sports.append(0)
+    elif x == "Sports":
+        Predicted_Academics.append(0)
+        Predicted_Arts.append(0)
+        Predicted_Sports.append(1)
+
+y["Predicted_Academics"] = Predicted_Academics
+y["Predicted_Arts"] = Predicted_Arts
+y["Predicted_Sports"] = Predicted_Sports
+
+y['Predicted_Academics'] = y['Predicted_Academics'].astype(np.float32)
+y['Predicted_Arts'] = y['Predicted_Arts'].astype(np.float32)
+y['Predicted_Sports'] = y['Predicted_Sports'].astype(np.float32)
+print(y.head())
+
 train.drop('Predicted Hobby', inplace=True, axis=1)
 
+#'''
 
+'''
+y = train["Predicted Hobby"]
+train.drop('Predicted Hobby', inplace=True, axis=1)
+'''
 print(train.describe())
 print(train.head())
 print(y.head())
@@ -158,7 +219,7 @@ model = keras.Sequential([
     layers.Activation('relu'),
     layers.Dense(30),
     layers.Activation('relu'),
-    layers.Dense(1),
+    layers.Dense(3),
 ])
 
 
@@ -172,7 +233,7 @@ model.compile(
     metrics=['accuracy']
 )
 
-print("FFF")
+
 
 history = model.fit(
     X_training, y_training,
@@ -182,7 +243,7 @@ history = model.fit(
     verbose=0,
 )
 
-print("FFF")
+
 plt.plot(history.history['accuracy'])
 
 score = model.evaluate(X_testing, y_testing, verbose=0)
@@ -191,6 +252,9 @@ print("Test accuracy:", score[1])
 
 preds = model.predict(X_testing)
 
+print(preds)
+
+'''
 out=[]
 for idx, x in enumerate(preds):
     out.append(round(preds[idx][0]))
@@ -207,7 +271,7 @@ print('Print count of True elements in array: ', countCorrect)
 print('Print count of ALL elements in array: ', countAll)
 
 print("TOTAL ACCURATE: ", countCorrect/countAll)
-
+'''
 
 
 
