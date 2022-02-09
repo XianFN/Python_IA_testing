@@ -219,7 +219,11 @@ model = keras.Sequential([
     layers.Activation('relu'),
     layers.Dense(30),
     layers.Activation('relu'),
-    layers.Dense(3),
+    layers.Dense(30),
+    layers.Activation('relu'),
+    layers.Dense(30),
+    layers.Activation('relu'),
+    layers.Dense(3, activation='softmax'),
 ])
 
 
@@ -239,12 +243,15 @@ history = model.fit(
     X_training, y_training,
     validation_data=(X_testing, y_testing),
     batch_size=256,
-    epochs=100,
+    epochs=200,
     verbose=0,
 )
 
 
 plt.plot(history.history['accuracy'])
+plt.show()
+plt.plot(history.history['loss'])
+plt.show()
 
 score = model.evaluate(X_testing, y_testing, verbose=0)
 print("Test loss:", score[0])
