@@ -45,6 +45,7 @@ from sklearn.metrics import mean_absolute_error
 from sklearn.preprocessing import OneHotEncoder
 import os
 from sklearn.model_selection import train_test_split
+from tensorflow.keras import callbacks
 
 pd.set_option('display.max_columns', None)
 pd.set_option('display.width', 500)
@@ -219,19 +220,21 @@ model = keras.Sequential([
     layers.Activation('relu'),
     layers.Dense(30),
     layers.Activation('relu'),
-    layers.Dense(30),
-    layers.Activation('relu'),
-    layers.Dense(30),
-    layers.Activation('relu'),
     layers.Dense(3, activation='softmax'),
 ])
 
 
 print(y.dtypes)
+early_stopping =callbacks.EarlyStopping(
+    monitor='accuracy',
+    min_delta=0.0005,
+    patience=15,
+    restore_best_weights=True,
+)
 
 model.compile(
     optimizer=tf.keras.optimizers.Adam(
-        learning_rate=0.001),
+        learning_rate=0.01),
     loss='categorical_crossentropy',
     #sparse_categorical_crossentropy
     metrics=['accuracy']
@@ -242,9 +245,9 @@ model.compile(
 history = model.fit(
     X_training, y_training,
     validation_data=(X_testing, y_testing),
-    batch_size=256,
-    epochs=200,
-    verbose=0,
+    batch_size=64,
+    epochs=300,
+    callbacks=[early_stopping],
 )
 
 
@@ -253,13 +256,23 @@ plt.show()
 plt.plot(history.history['loss'])
 plt.show()
 
+history_df = pd.DataFrame(history.history)
+# Start the plot at epoch 5. You can change this to get a different view.
+history_df.loc[5:, ['loss']].plot();
+
+print(("Best accuracy {:0.4f}" )\
+      .format(history_df['accuracy'].max()))
+
 score = model.evaluate(X_testing, y_testing, verbose=0)
 print("Test loss:", score[0])
 print("Test accuracy:", score[1])
 
 preds = model.predict(X_testing)
 
-print(preds)
+print(y_testing)
+print(y_testing.to_numpy().argmax(axis=1))
+
+print(preds.argmax(axis=1))
 
 '''
 out=[]

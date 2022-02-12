@@ -172,14 +172,14 @@ model.compile(
         learning_rate=0.0005),
     loss=tf.keras.losses.BinaryCrossentropy(
         from_logits=False,
-        label_smoothing=0.0,
-        reduction="auto"),
+        label_smoothing=0.0),
     metrics=['accuracy'])
 
 
 
-history = model.fit(training, label, batch_size=128, epochs=200, verbose=False)
+history = model.fit(training, label, batch_size=128, epochs=100, verbose=False)
 plt.plot(history.history['accuracy'])
+#plt.show()
 
 score = model.evaluate(training, label, verbose=0)
 print("Test loss:", score[0])
@@ -191,6 +191,8 @@ out=[]
 for idx, x in enumerate(preds):
     out.append(round(preds[idx][0]))
 
+plt.plot(history.history['loss'])
+#plt.show()
 
 
 y_test = gender_data['Survived']

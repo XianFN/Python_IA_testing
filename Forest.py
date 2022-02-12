@@ -96,6 +96,7 @@ def parameters_test1():
 
 def train1(X,X_test):
     parameters_test1()
+    from sklearn.tree import DecisionTreeRegressor
 
     y = X.Survived
 
@@ -107,7 +108,7 @@ def train1(X,X_test):
 
 
     my_pipeline = Pipeline(steps=[('preprocessor', SimpleImputer()),
-                                  ('model', RandomForestClassifier(n_estimators=200, random_state=2))
+                                  ('model', DecisionTreeRegressor())
                                   ])
 
     my_pipeline.fit(X, y)
@@ -132,7 +133,7 @@ def train2(X,X_test):
     X = pd.get_dummies(X[features])
     X_test = pd.get_dummies(X_test[features])
 
-    model = RandomForestClassifier(n_estimators=100, max_depth=3, random_state=2)
+    model = RandomForestClassifier(n_estimators=50, max_depth=2, random_state=2)
     model.fit(X, y)
 
     # VALIDATE
@@ -262,7 +263,7 @@ print("_____________TRAIN MODEL _____________")
 print("_______________________________________\n")
 
 #train1(X, X_test)
-#train2(X, X_test)
+train2(X, X_test)
 #train3(X, X_test)
 
 

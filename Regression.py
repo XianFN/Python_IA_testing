@@ -32,6 +32,7 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.pipeline import Pipeline
 from sklearn.impute import SimpleImputer
 from sklearn.metrics import mean_absolute_error
+from tensorflow.keras import callbacks
 
 import os
 from sklearn.model_selection import train_test_split
@@ -76,6 +77,7 @@ X = Data.drop('price', axis=1)
 y = Data['price']
 
 
+print(X.shape)
 from sklearn.model_selection import train_test_split
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
@@ -98,15 +100,16 @@ activation_layer = layers.Activation('selu')
 x = tf.linspace(-3.0, 3.0, 100)
 y = activation_layer(x) # once created, a layer is callable just like a function
 
-plt.figure(dpi=100)
-plt.plot(x, y)
-plt.xlim(-3, 3)
-plt.xlabel("Input")
-plt.ylabel("Output")
-plt.show()
+early_stopping =callbacks.EarlyStopping(
+    monitor='loss',
+    min_delta=-0.5,
+    patience=15,
+    restore_best_weights=True,
+)
 
 model.compile(
-    optimizer='adam',
+    optimizer=tf.keras.optimizers.Adamax(
+        learning_rate=0.05),
     loss='mae',
 )
 
@@ -114,7 +117,8 @@ history = model.fit(
     X_train, y_train,
     validation_data=(X_test, y_test),
     batch_size=256,
-    epochs=200,
+    epochs=700,
+    callbacks=[early_stopping],
 )
 
 
@@ -125,7 +129,10 @@ history_df.loc[5:, ['loss']].plot();
 print(("Best Validation Loss: {:0.4f}" )\
       .format(history_df['loss'].min()))
 
-#other loss 13247.33962488121
+plt.plot(history.history['loss'])
+plt.show()
+
+
 
 
 
