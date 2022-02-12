@@ -255,7 +255,6 @@ X_training =train
 X_testing = test
 
 model = keras.Sequential([
-    #layers.Dropout(0.2, input_shape=(16,)),
     layers.Dense(30, input_shape=[16]),
     layers.Activation('relu'),
     layers.Dropout(0.3),
@@ -269,7 +268,7 @@ model = keras.Sequential([
 
 early_stopping =callbacks.EarlyStopping(
     monitor='accuracy',
-    min_delta=0.001,
+    min_delta=0.005,
     patience=20,
     restore_best_weights=True,
 )
@@ -289,7 +288,6 @@ history = model.fit(
     validation_data=(X_testing, y_testing),
     batch_size=64,
     epochs=300,
-    # verbose=0,
     callbacks=[early_stopping],
 )
 
