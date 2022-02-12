@@ -54,26 +54,26 @@ pd.set_option('display.width', 500)
 
 #Open files
 
-train = pd.read_csv('Hobby_Data.csv')
+Data = pd.read_csv('Hobby_Data.csv')
 
 
 
-train.dropna( how='all', inplace=True)
+Data.dropna( how='all', inplace=True)
 
 
-for x in train.columns:
-    print(f"{x}\n{train[x].unique()[:10]}")
+for x in Data.columns:
+    print(f"{x}\n{Data[x].unique()[:10]}")
 
 
-train['Olympiad_Participation'] = train['Olympiad_Participation'].map({'Yes': 1, 'No': 0})
-train['Scholarship'] = train['Scholarship'].map({'Yes': 1, 'No': 0})
-train['School'] = train['School'].map({'Yes': 1, 'No': 0})
-train['Projects'] = train['Projects'].map({'Yes': 1, 'No': 0})
-train['Medals'] = train['Medals'].map({'Yes': 1, 'No': 0})
-train['Career_sprt'] = train['Career_sprt'].map({'Yes': 1, 'No': 0})
-train['Act_sprt'] = train['Act_sprt'].map({'Yes': 1, 'No': 0})
-train['Fant_arts'] = train['Fant_arts'].map({'Yes': 1, 'No': 0})
-train['Won_arts'] = train['Won_arts'].map({'Yes': 2, 'Maybe': 1, 'No': 0})
+Data['Olympiad_Participation'] = Data['Olympiad_Participation'].map({'Yes': 1, 'No': 0})
+Data['Scholarship'] = Data['Scholarship'].map({'Yes': 1, 'No': 0})
+Data['School'] = Data['School'].map({'Yes': 1, 'No': 0})
+Data['Projects'] = Data['Projects'].map({'Yes': 1, 'No': 0})
+Data['Medals'] = Data['Medals'].map({'Yes': 1, 'No': 0})
+Data['Career_sprt'] = Data['Career_sprt'].map({'Yes': 1, 'No': 0})
+Data['Act_sprt'] = Data['Act_sprt'].map({'Yes': 1, 'No': 0})
+Data['Fant_arts'] = Data['Fant_arts'].map({'Yes': 1, 'No': 0})
+Data['Won_arts'] = Data['Won_arts'].map({'Yes': 2, 'Maybe': 1, 'No': 0})
 
 
 
@@ -82,7 +82,7 @@ Fav_subScience = []
 Fav_subAny_language = []
 Fav_subHistory_Geography = []
 
-for x in train.Fav_sub:
+for x in Data.Fav_sub:
     if x == "Mathematics":
         Fav_subMathematics.append(1)
         Fav_subScience.append(0)
@@ -108,43 +108,43 @@ for x in train.Fav_sub:
 
 
 
-train["Fav_subMathematics"] = Fav_subMathematics
-train["Fav_subScience"] = Fav_subScience
-train["Fav_subAny_language"] = Fav_subAny_language
-train["Fav_subHistory_Geography"] = Fav_subHistory_Geography
-train.drop('Fav_sub', inplace=True, axis=1)
+Data["Fav_subMathematics"] = Fav_subMathematics
+Data["Fav_subScience"] = Fav_subScience
+Data["Fav_subAny_language"] = Fav_subAny_language
+Data["Fav_subHistory_Geography"] = Fav_subHistory_Geography
+Data.drop('Fav_sub', inplace=True, axis=1)
 
 
 
 
-print(train.dtypes)
+print(Data.dtypes)
 
-train['Olympiad_Participation'] = train['Olympiad_Participation'].astype(np.float32)
-train['Scholarship'] = train['Scholarship'].astype(np.float32)
-train['School'] = train['School'].astype(np.float32)
-train['Projects'] = train['Projects'].astype(np.float32)
-train['Grasp_pow'] = train['Grasp_pow'].astype(np.float32)
-train['Time_sprt'] = train['Time_sprt'].astype(np.float32)
-train['Medals'] = train['Medals'].astype(np.float32)
-train['Career_sprt'] = train['Career_sprt'].astype(np.float32)
-train['Act_sprt'] = train['Act_sprt'].astype(np.float32)
-train['Fant_arts'] = train['Fant_arts'].astype(np.float32)
-train['Won_arts'] = train['Won_arts'].astype(np.float32)
-train['Time_art'] = train['Time_art'].astype(np.float32)
-train['Fav_subMathematics'] = train['Fav_subMathematics'].astype(np.float32)
-train['Fav_subScience'] = train['Fav_subScience'].astype(np.float32)
-train['Fav_subAny_language'] = train['Fav_subAny_language'].astype(np.float32)
-train['Fav_subHistory_Geography'] = train['Fav_subHistory_Geography'].astype(np.float32)
+Data['Olympiad_Participation'] = Data['Olympiad_Participation'].astype(np.float32)
+Data['Scholarship'] = Data['Scholarship'].astype(np.float32)
+Data['School'] = Data['School'].astype(np.float32)
+Data['Projects'] = Data['Projects'].astype(np.float32)
+Data['Grasp_pow'] = Data['Grasp_pow'].astype(np.float32)
+Data['Time_sprt'] = Data['Time_sprt'].astype(np.float32)
+Data['Medals'] = Data['Medals'].astype(np.float32)
+Data['Career_sprt'] = Data['Career_sprt'].astype(np.float32)
+Data['Act_sprt'] = Data['Act_sprt'].astype(np.float32)
+Data['Fant_arts'] = Data['Fant_arts'].astype(np.float32)
+Data['Won_arts'] = Data['Won_arts'].astype(np.float32)
+Data['Time_art'] = Data['Time_art'].astype(np.float32)
+Data['Fav_subMathematics'] = Data['Fav_subMathematics'].astype(np.float32)
+Data['Fav_subScience'] = Data['Fav_subScience'].astype(np.float32)
+Data['Fav_subAny_language'] = Data['Fav_subAny_language'].astype(np.float32)
+Data['Fav_subHistory_Geography'] = Data['Fav_subHistory_Geography'].astype(np.float32)
 
-train['Predicted Hobby'] = train['Predicted Hobby'].astype("string")
+Data['Predicted Hobby'] = Data['Predicted Hobby'].astype("string")
 
-print(train.dtypes)
+print(Data.dtypes)
 
 
 ###########
 '''
 y = pd.DataFrame([])
-y["Predicted Hobby"] = train["Predicted Hobby"]
+y["Predicted Hobby"] = Data["Predicted Hobby"]
 y_training = y[:1200]
 y_testing = y[1200:]
 
@@ -168,7 +168,15 @@ OH_X_valid = pd.concat([num_X_valid, OH_cols_valid], axis=1)
 print(y.head())
 '''
 #'''
-y = pd.DataFrame([])
+
+
+train = Data.sample(frac=0.75, random_state=200)
+
+
+test = Data.drop(train.index)
+
+
+y_training = pd.DataFrame([])
 
 Predicted_Academics = []
 Predicted_Arts = []
@@ -188,47 +196,81 @@ for x in train['Predicted Hobby']:
         Predicted_Arts.append(0)
         Predicted_Sports.append(1)
 
-y["Predicted_Academics"] = Predicted_Academics
-y["Predicted_Arts"] = Predicted_Arts
-y["Predicted_Sports"] = Predicted_Sports
+y_training["Predicted_Academics"] = Predicted_Academics
+y_training["Predicted_Arts"] = Predicted_Arts
+y_training["Predicted_Sports"] = Predicted_Sports
 
-y['Predicted_Academics'] = y['Predicted_Academics'].astype(np.float32)
-y['Predicted_Arts'] = y['Predicted_Arts'].astype(np.float32)
-y['Predicted_Sports'] = y['Predicted_Sports'].astype(np.float32)
-print(y.head())
+y_training['Predicted_Academics'] = y_training['Predicted_Academics'].astype(np.float32)
+y_training['Predicted_Arts'] = y_training['Predicted_Arts'].astype(np.float32)
+y_training['Predicted_Sports'] = y_training['Predicted_Sports'].astype(np.float32)
+
 
 train.drop('Predicted Hobby', inplace=True, axis=1)
-
+print(y_training.head())
 #'''
+########################################## TEST DATA ###################
+y_testing = pd.DataFrame([])
+
+Predicted_Academics = []
+Predicted_Arts = []
+Predicted_Sports = []
+
+for x in test['Predicted Hobby']:
+    if x == "Academics":
+        Predicted_Academics.append(1)
+        Predicted_Arts.append(0)
+        Predicted_Sports.append(0)
+    elif x == "Arts":
+        Predicted_Academics.append(0)
+        Predicted_Arts.append(1)
+        Predicted_Sports.append(0)
+    elif x == "Sports":
+        Predicted_Academics.append(0)
+        Predicted_Arts.append(0)
+        Predicted_Sports.append(1)
+
+y_testing["Predicted_Academics"] = Predicted_Academics
+y_testing["Predicted_Arts"] = Predicted_Arts
+y_testing["Predicted_Sports"] = Predicted_Sports
+
+y_testing['Predicted_Academics'] = y_testing['Predicted_Academics'].astype(np.float32)
+y_testing['Predicted_Arts'] = y_testing['Predicted_Arts'].astype(np.float32)
+y_testing['Predicted_Sports'] = y_testing['Predicted_Sports'].astype(np.float32)
+
+
+test.drop('Predicted Hobby', inplace=True, axis=1)
+print(y_testing.head())
+
 
 '''
-y = train["Predicted Hobby"]
-train.drop('Predicted Hobby', inplace=True, axis=1)
+y = Data["Predicted Hobby"]
+Data.drop('Predicted Hobby', inplace=True, axis=1)
 '''
-print(train.describe())
-print(train.head())
-print(y.head())
+
 
 print(train.shape)
-X_training = train[:1200]
-X_testing = train[1200:]
-y_training = y[:1200]
-y_testing = y[1200:]
+print(test.shape)
+
+X_training =train
+X_testing = test
 
 model = keras.Sequential([
+    #layers.Dropout(0.2, input_shape=(16,)),
     layers.Dense(30, input_shape=[16]),
     layers.Activation('relu'),
+    layers.Dropout(0.3),
+    layers.BatchNormalization(),
     layers.Dense(30),
     layers.Activation('relu'),
+    layers.Dropout(0.3),
+    layers.BatchNormalization(),
     layers.Dense(3, activation='softmax'),
 ])
 
-
-print(y.dtypes)
 early_stopping =callbacks.EarlyStopping(
     monitor='accuracy',
-    min_delta=0.0005,
-    patience=15,
+    min_delta=0.001,
+    patience=20,
     restore_best_weights=True,
 )
 
@@ -247,6 +289,7 @@ history = model.fit(
     validation_data=(X_testing, y_testing),
     batch_size=64,
     epochs=300,
+    # verbose=0,
     callbacks=[early_stopping],
 )
 
@@ -267,6 +310,7 @@ score = model.evaluate(X_testing, y_testing, verbose=0)
 print("Test loss:", score[0])
 print("Test accuracy:", score[1])
 
+'''
 preds = model.predict(X_testing)
 
 print(y_testing)
@@ -274,13 +318,12 @@ print(y_testing.to_numpy().argmax(axis=1))
 
 print(preds.argmax(axis=1))
 
-'''
-out=[]
-for idx, x in enumerate(preds):
-    out.append(round(preds[idx][0]))
 
 
-Correct = (y_testing == out)
+
+
+
+Correct = (y_testing.to_numpy().argmax(axis=1) == preds.argmax(axis=1))
 
 print("TOTAL")
 print(Correct)
@@ -291,7 +334,7 @@ print('Print count of True elements in array: ', countCorrect)
 print('Print count of ALL elements in array: ', countAll)
 
 print("TOTAL ACCURATE: ", countCorrect/countAll)
+
+
+
 '''
-
-
-
